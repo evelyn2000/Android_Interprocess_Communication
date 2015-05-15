@@ -4,7 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import com.example.data.IRemoteService;
+import com.example.data.IRemoteServiceCallback;
 
 public class RemoteService extends Service {
 
@@ -30,8 +30,14 @@ public class RemoteService extends Service {
     }
 
     private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
-        public void execute(String data){
+        public void execute(String data, IRemoteServiceCallback callback){
             Log.d("RemoteService", "execute " + data);
+            try{
+                callback.handleResponse("Response from server");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         }
     };
 }

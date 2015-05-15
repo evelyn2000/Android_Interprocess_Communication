@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.data.IRemoteService;
+import com.example.data.IRemoteServiceCallback;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -26,7 +27,11 @@ public class MainActivity extends ActionBarActivity {
 
         Log.e("ClassName", MainActivity.class.getName());
     }
-
+    IRemoteServiceCallback.Stub mCallback = new IRemoteServiceCallback.Stub() {
+        public void handleResponse(String name) throws RemoteException {
+            Log.d("Callback", name);
+        }
+    };
     // Bind RemoteService
     IRemoteService mIRemoteService;
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -38,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
             mIRemoteService = IRemoteService.Stub.asInterface(service);
 
             try{
-                mIRemoteService.execute("hello from Client");
+                mIRemoteService.execute("hello from Client", mCallback);
             }catch (RemoteException e){
                 e.printStackTrace();
             }
