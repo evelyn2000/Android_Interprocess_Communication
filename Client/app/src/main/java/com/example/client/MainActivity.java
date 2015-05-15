@@ -1,9 +1,19 @@
 package com.example.client;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import com.example.data.IRemoteService;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,8 +22,53 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        Log.e("ClassName", MainActivity.class.getName());
     }
 
+    // Bind RemoteService
+    IRemoteService mIRemoteService;
+    private ServiceConnection mConnection = new ServiceConnection() {
+        // Called when the connection with the service is established
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // Following the example above for an AIDL interface,
+            // this gets an instance of the IRemoteInterface, which we can use to call on the service
+            Log.e("Client", "onServiceConnected");
+            mIRemoteService = IRemoteService.Stub.asInterface(service);
+
+//            try{
+//                mIRemoteService.execute("test");
+//            }catch (RemoteException e){
+//                e.printStackTrace();
+//            }
+//
+
+        }
+
+        // Called when the connection with the service disconnects unexpectedly
+        public void onServiceDisconnected(ComponentName className) {
+            Log.e("Error", "Service has unexpectedly disconnected");
+            mIRemoteService = null;
+        }
+    };
+
+
+    public void initConnection(){
+        Log.e("ClassName", "initConnection");
+
+
+        // IMPORTANT!
+        Intent intent = new Intent("com.example.data.RemoteService"); // Intent-filter in Server Project
+        intent.setPackage("com.example.server"); // Server project package name
+
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    public void sendRequest(View v){
+        Toast.makeText(this, "sendRequest", Toast.LENGTH_SHORT).show();
+        initConnection();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

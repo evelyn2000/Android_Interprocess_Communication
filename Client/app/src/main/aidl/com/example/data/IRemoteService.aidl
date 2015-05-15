@@ -1,5 +1,5 @@
 // IRemoteService.aidl
-package com.example.server;
+package com.example.data;
 
 // Declare any non-default types here with import statements
 
