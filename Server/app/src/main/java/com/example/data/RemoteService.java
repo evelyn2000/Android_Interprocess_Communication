@@ -11,13 +11,13 @@ public class RemoteService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.e("RemoteService", "onCreate");
+        Log.d("RemoteService", "onCreate");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("RemoteService", "onDestroy");
+        Log.d("RemoteService", "onDestroy");
     }
 
     public RemoteService() {
@@ -31,7 +31,7 @@ public class RemoteService extends Service {
 
     private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
         public void execute(String data){
-            Log.d("RemoteService", "execute");
+            Log.d("RemoteService", "execute " + data);
         }
     };
 }

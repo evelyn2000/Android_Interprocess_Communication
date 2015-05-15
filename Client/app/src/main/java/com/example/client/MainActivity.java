@@ -37,12 +37,12 @@ public class MainActivity extends ActionBarActivity {
             Log.e("Client", "onServiceConnected");
             mIRemoteService = IRemoteService.Stub.asInterface(service);
 
-//            try{
-//                mIRemoteService.execute("test");
-//            }catch (RemoteException e){
-//                e.printStackTrace();
-//            }
-//
+            try{
+                mIRemoteService.execute("hello from Client");
+            }catch (RemoteException e){
+                e.printStackTrace();
+            }
+
 
         }
 
