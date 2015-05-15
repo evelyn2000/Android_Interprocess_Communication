@@ -27,6 +27,15 @@ public class MainActivity extends ActionBarActivity {
 
         Log.e("ClassName", MainActivity.class.getName());
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mIRemoteService != null){
+            unbindService(mConnection);
+        }
+    }
+
     IRemoteServiceCallback.Stub mCallback = new IRemoteServiceCallback.Stub() {
         public void handleResponse(String name) throws RemoteException {
             Log.d("Callback", name);
@@ -43,7 +52,9 @@ public class MainActivity extends ActionBarActivity {
             mIRemoteService = IRemoteService.Stub.asInterface(service);
 
             try{
-                mIRemoteService.execute("hello from Client", mCallback);
+                IRemoteServiceCallback callback = IRemoteServiceCallback.Stub.asInterface(mCallback);
+                String s = "hello from Client";
+                mIRemoteService.execute(s, callback);
             }catch (RemoteException e){
                 e.printStackTrace();
             }
